@@ -1,2 +1,2 @@
-# turbo-giggle
-Simple Concurrency testing framework
+# ICodeStar-SimpleConcurrencyTestTool
+这是一个非常简单的并发测试工具，有基础的并发测试能力，适合Java多线程学习
