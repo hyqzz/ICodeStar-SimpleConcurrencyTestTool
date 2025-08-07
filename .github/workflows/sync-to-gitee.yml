@@ -1,0 +1,39 @@
+name: Sync to Gitee
+
+on:
+  push:
+    branches: [develop, release, master, hotfix]  # 监控的分支
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 检出 GitHub 仓库代码（关键修复步骤）
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整历史记录
+          
+      # 配置 SSH 密钥
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GITEE_SSH_PRIVATE_KEY }}" > ~/.ssh/github_to_gitee
+          chmod 600 ~/.ssh/github_to_gitee
+          ssh-keyscan gitee.com >> ~/.ssh/known_hosts
+          
+      # 配置 Git 身份
+      - name: Set Git Identity
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@users.noreply.github.com"
+          
+      # 执行镜像同步
+      - name: Push Updates to Gitee
+        run: |
+          git remote add gitee git@gitee.com:heyqzz/ICodeStar-WechatMall.git || true
+          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          git push --force gitee $CURRENT_BRANCH
+          
+        env:
+          GIT_SSH_COMMAND: "ssh -i ~/.ssh/github_to_gitee"
