@@ -31,7 +31,7 @@ jobs:
       # 执行镜像同步
       - name: Push Updates to Gitee
         run: |
-          git remote add gitee git@gitee.com:heyqzz/ICodeStar-WechatMall.git || true
+          git remote add gitee git@gitee.com:heyqzz/ICodeStar-SimpleConcurrencyTestTool || true
           CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
           git push --force gitee $CURRENT_BRANCH
           
